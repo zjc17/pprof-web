@@ -1,5 +1,9 @@
 # Pprof Web Visualizer
 
+[![Release](https://github.com/zjc17/pprof-web/actions/workflows/release.yml/badge.svg)](https://github.com/zjc17/pprof-web/actions/workflows/release.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/zjc17/pprof-web)](https://goreportcard.com/report/github.com/zjc17/pprof-web)
+[![Docker Image](https://img.shields.io/docker/pulls/lovecho/pprof-web.svg)](https://hub.docker.com/r/lovecho/pprof-web)
+
 Golang Pprof Web Visualizer is a web application that visualizes the output of the pprof tool in a web browser.
 
 The Size of the binary is < 10MB.

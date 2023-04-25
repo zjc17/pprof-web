@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	fmt.Printf("pprof web v%s\n\n", version.Version)
+	fmt.Printf("pprof web %s\n\n", version.Version)
 
 	launchParam := server.DefaultLaunchParam()
 	if err := server.Launch(launchParam); err != nil {
