@@ -12,16 +12,17 @@ WORKDIR /app
 COPY --from=deps /go/pkg/ /go/pkg/
 COPY .. .
 
-RUN go build -ldflags="-X github.com/zjc17/pprof-web/internal/version.Version=1.0" -o ./main
+RUN go build -ldflags="-X github.com/zjc17/pprof-web/internal/version.Version=1.0" -o ./pprof-web
 
 # Runner
 FROM alpine AS runner
 RUN apk add --update graphviz
-WORKDIR /app
-COPY --from=go-builder /app/main /app/main
+RUN rm -rf /var/cache/apk/*
+WORKDIR /
+COPY --from=go-builder /app/pprof-web /bin/pprof-web
 
 EXPOSE 8080
-ENTRYPOINT ["./main"]
+ENTRYPOINT ["pprof-web"]
 
 
 
