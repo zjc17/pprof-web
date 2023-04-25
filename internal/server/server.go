@@ -7,6 +7,11 @@ import (
 	"net/http"
 )
 
+const (
+	pprofWebPath  = "/pprof"
+	pprofFilePath = "/tmp/pprof-web-file"
+)
+
 type (
 	LaunchParams struct {
 		Port uint16
@@ -35,14 +40,22 @@ func Launch(params *LaunchParams) error {
 			return
 		}
 		// store file into tmp path
-		if err := c.SaveUploadedFile(fileHeader, "/tmp/pprof-web-file"); err != nil {
+		if err := c.SaveUploadedFile(fileHeader, pprofFilePath); err != nil {
 			log.Printf("save file error: %v", err)
 			c.Status(http.StatusInternalServerError)
 			return
 		}
 		// use pprof to analyze
-		c.Redirect(http.StatusTemporaryRedirect, "/")
+		c.Redirect(http.StatusTemporaryRedirect, pprofWebPath)
 	})
-
+	router.Any(pprofWebPath, func(c *gin.Context) {
+		mux, err := startPProfServer(pprofFilePath)
+		if err != nil {
+			log.Printf("start pprof server error: %v", err)
+			c.Status(http.StatusInternalServerError)
+			return
+		}
+		mux.ServeHTTP(c.Writer, c.Request)
+	})
 	return router.Run(fmt.Sprintf(":%d", params.Port))
 }
