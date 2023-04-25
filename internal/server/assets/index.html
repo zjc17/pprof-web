@@ -32,7 +32,8 @@
     const sampleForm = document.getElementById("file-form");
     const fileUploader = document.getElementById("file-uploader-1");
     sampleForm.addEventListener("submit", async (e) => {
-        e.preventDefault()  // Cancel redirection
+        // Cancel redirection
+        e.preventDefault()
         // Perform action to send file to a server
         await fileUploader.getFiles().then(files => {
             if (!files || files.length != 1) {
@@ -41,9 +42,16 @@
             }
             let formData = new FormData();
             formData.append("file", files[0]);
-            fetch('/submit', {method: "POST", body: formData}).then(res => {
-                console.log('submit res', res)
-            })
+            fetch('/submit', {method: "POST", body: formData, redirect: 'follow'})
+                .then(response => {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    }
+                    console.log('submit res', res)
+                })
+                .catch(error => {
+                    console.log('submit error', error)
+                })
         })
         fileUploader.reset(); // reset the form to initial state
     });
