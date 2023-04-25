@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+    <title>PProf Web Interface</title>
+    <script type="module"
+            src="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/dist/crayons/crayons.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/dist/crayons/crayons.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@freshworks/crayons@v4/css/crayons-min.css"/>
+</head>
+<body>
+
+<form method="post" onsubmit id="file-form"
+      enctype="multipart/form-data" style="width: 600px; margin: 0 auto;">
+    <h1 style="text-align: center">PProf Web Interface</h1>
+    <div class="fw-flex fw-flex-column fw-justify-center fw-max-w-10">
+        <fw-file-uploader
+                id="file-uploader-1"
+                text="Upload File"
+                description="or drag and drop your pprof file here"
+                hint="File size must be within 5MB"
+                max-file-size="5"
+                accept=".txt"
+        >
+        </fw-file-uploader>
+        <br/>
+        <fw-button class="fw-b-50" type="submit" color="secondary">Upload file</fw-button>
+    </div>
+    <p>Upload a file to explore it using the <a href="https://github.com/google/pprof">Pprof</a> web interface.</p>
+    <p>See the <a href="https://github.com/zjc17/pprof-web">documentation/source code</a>.</p>
+</form>
+<script>
+    const sampleForm = document.getElementById("file-form");
+    const fileUploader = document.getElementById("file-uploader-1");
+    sampleForm.addEventListener("submit", async (e) => {
+        e.preventDefault()  // Cancel redirection
+        // Perform action to send file to a server
+        await fileUploader.getFiles().then(files => {
+            if (!files || files.length != 1) {
+                alert("Please select a single file")
+                return
+            }
+            let formData = new FormData();
+            formData.append("file", files[0]);
+            fetch('/submit', {method: "POST", body: formData}).then(res => {
+                console.log('submit res', res)
+            })
+        })
+        fileUploader.reset(); // reset the form to initial state
+    });
+</script>
+</body>
+</html>
