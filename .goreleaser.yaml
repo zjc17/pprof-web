@@ -1,0 +1,117 @@
+project_name: pprof-web
+
+builds:
+  - <<: &build_defaults
+      env:
+        - CGO_ENABLED=0
+      ldflags:
+        - -X "github.com/zjc17/pprof-web/internal/version.Version={{ .Tag }}"
+    id: macos
+    goos: [ darwin ]
+    goarch: [ amd64, arm64 ]
+
+  - <<: *build_defaults
+    id: linux
+    goos: [linux]
+    goarch: ["386", arm, amd64, arm64]
+    goarm:
+      - "7"
+      - "6"
+
+dockers:
+
+  - image_templates:
+      - "lovecho/pprof-web:linux-amd64-{{ .Tag }}"
+      - "lovecho/pprof-web:linux-amd64"
+    dockerfile: docker/goreleaser.Dockerfile
+    use: buildx
+    goarch: amd64
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.description={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.url=https://github.com/zjc17/pprof-web"
+      - "--label=org.opencontainers.image.source=https://github.com/zjc17/pprof-web"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.licenses=Apache-v2"
+
+  - image_templates:
+      - "lovecho/pprof-web:linux-arm64-{{ .Tag }}"
+      - "lovecho/pprof-web:linux-arm64"
+    dockerfile: docker/goreleaser.Dockerfile
+    use: buildx
+    goos: linux
+    goarch: arm64
+    goarm: ''
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/arm64"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.description={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.url=https://github.com/zjc17/pprof-web"
+      - "--label=org.opencontainers.image.source=https://github.com/zjc17/pprof-web"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.licenses=Apache-v2"
+
+  - image_templates:
+      - "lovecho/pprof-web:linux-armv7-{{ .Tag }}"
+      - "lovecho/pprof-web:linux-armv7"
+    dockerfile: docker/goreleaser.Dockerfile
+    use: buildx
+    goos: linux
+    goarch: arm
+    goarm: "7"
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/arm/v7"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.description={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.url=https://github.com/zjc17/pprof-web"
+      - "--label=org.opencontainers.image.source=https://github.com/zjc17/pprof-web"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.licenses=Apache-v2"
+
+  - image_templates:
+      - "lovecho/pprof-web:linux-armv6-{{ .Tag }}"
+      - "lovecho/pprof-web:linux-armv6"
+    dockerfile: docker/goreleaser.Dockerfile
+    use: buildx
+    goos: linux
+    goarch: arm
+    goarm: "6"
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/arm/v6"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.description={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.url=https://github.com/zjc17/pprof-web"
+      - "--label=org.opencontainers.image.source=https://github.com/zjc17/pprof-web"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.licenses=Apache-v2"
+
+
+docker_manifests:
+  - name_template: "lovecho/pprof-web:{{ .Tag }}"
+    image_templates:
+      - "lovecho/pprof-web:linux-amd64-{{ .Tag }}"
+      - "lovecho/pprof-web:linux-arm64-{{ .Tag }}"
+      - "lovecho/pprof-web:linux-armv7-{{ .Tag }}"
+      - "lovecho/pprof-web:linux-armv6-{{ .Tag }}"
+    skip_push: "false"
+
+  - name_template: "lovecho/pprof-web:latest"
+    image_templates:
+      - "lovecho/pprof-web:linux-amd64-{{ .Tag }}"
+      - "lovecho/pprof-web:linux-arm64-{{ .Tag }}"
+      - "lovecho/pprof-web:linux-armv7-{{ .Tag }}"
+      - "lovecho/pprof-web:linux-armv6-{{ .Tag }}"
+    skip_push: "false"

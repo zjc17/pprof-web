@@ -3,14 +3,14 @@ FROM golang:1.20-alpine AS base
 # Install dependency based on package manager
 FROM base AS deps
 WORKDIR /app
-COPY go.mod go.sum ./
+COPY ../go.mod go.sum ./
 RUN go mod download
 
 # Rebuild the source code only when needed
 FROM base AS go-builder
 WORKDIR /app
 COPY --from=deps /go/pkg/ /go/pkg/
-COPY . .
+COPY .. .
 
 RUN go build -ldflags="-X github.com/zjc17/pprof-web/internal/version.Version=1.0" -o ./main
 
