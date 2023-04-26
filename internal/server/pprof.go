@@ -29,11 +29,18 @@ func startPProfServer(filePath string) (mux *http.ServeMux, err error) {
 func pprofHttpServer(mux *http.ServeMux) func(*driver.HTTPServerArgs) error {
 	return func(args *driver.HTTPServerArgs) error {
 		for pattern, handler := range args.Handlers {
+			//if pattern == "/" {
+			//	mux.Handle(pprofWebPath, handler)
+			//} else {
+			//	mux.Handle(path.Join(pprofWebPath, pattern), handler)
+			//}
+			var joinedPattern string
 			if pattern == "/" {
-				mux.Handle(pprofWebPath, handler)
+				joinedPattern = pprofWebPath
 			} else {
-				mux.Handle(path.Join(pprofWebPath, pattern), handler)
+				joinedPattern = path.Join(pprofWebPath, pattern)
 			}
+			mux.Handle(joinedPattern, handler)
 		}
 		return nil
 	}

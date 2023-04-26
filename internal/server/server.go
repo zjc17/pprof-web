@@ -3,13 +3,14 @@ package server
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/zjc17/pprof-web/internal/files"
 	"log"
 	"net/http"
+	"net/http/pprof"
 )
 
 const (
-	pprofWebPath  = "/pprof"
-	pprofFilePath = "/tmp/pprof-web-file"
+	pprofWebPath = "/pprof/"
 )
 
 type (
@@ -32,6 +33,7 @@ func Launch(params *LaunchParams) error {
 	router.GET("/", func(c *gin.Context) {
 		c.Data(http.StatusOK, "text/html", []byte(PageDocument))
 	})
+
 	router.POST("/submit", func(c *gin.Context) {
 		// parse file form
 		fileHeader, err := c.FormFile("file")
@@ -41,16 +43,24 @@ func Launch(params *LaunchParams) error {
 			return
 		}
 		// store file into tmp path
-		if err := c.SaveUploadedFile(fileHeader, pprofFilePath); err != nil {
+		fileID := files.GenerateFileID()
+		filePath := files.GetFilePathByFileID(fileID)
+		if err := c.SaveUploadedFile(fileHeader, filePath); err != nil {
 			log.Printf("save file error: %v", err)
 			c.Status(http.StatusInternalServerError)
 			return
 		}
 		// use pprof to analyze
-		c.Redirect(http.StatusTemporaryRedirect, pprofWebPath)
+		c.Redirect(http.StatusTemporaryRedirect, pprofWebPath+"?file_id="+fileID)
 	})
-	router.Any(pprofWebPath, func(c *gin.Context) {
-		mux, err := startPProfServer(pprofFilePath)
+	router.Any(pprofWebPath+"*pprof-path", func(c *gin.Context) {
+		fileID := c.Query("file_id")
+		filePath := files.GetFilePathByFileID(fileID)
+		if fileID == "" {
+			c.Redirect(http.StatusTemporaryRedirect, "/")
+			return
+		}
+		mux, err := startPProfServer(filePath)
 		if err != nil {
 			log.Printf("start pprof server error: %v", err)
 			c.Status(http.StatusInternalServerError)
@@ -58,5 +68,19 @@ func Launch(params *LaunchParams) error {
 		}
 		mux.ServeHTTP(c.Writer, c.Request)
 	})
+	RegisterDebugRouter(router)
 	return router.Run(fmt.Sprintf(":%d", params.Port))
+}
+
+func RegisterDebugRouter(router *gin.Engine) {
+	wrapHandler := func(handler func(w http.ResponseWriter, r *http.Request)) gin.HandlerFunc {
+		return func(c *gin.Context) {
+			handler(c.Writer, c.Request)
+		}
+	}
+	router.Any("/debug/pprof/", wrapHandler(pprof.Index))
+	router.Any("/debug/pprof/cmdline", wrapHandler(pprof.Cmdline))
+	router.Any("/debug/pprof/profile", wrapHandler(pprof.Profile))
+	router.Any("/debug/pprof/symbol", wrapHandler(pprof.Symbol))
+	router.Any("/debug/pprof/trace", wrapHandler(pprof.Trace))
 }
