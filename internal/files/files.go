@@ -1,13 +1,22 @@
 package files
 
-import "github.com/zjc17/pprof-web/pkg/random"
+import (
+	"fmt"
+	"github.com/zjc17/pprof-web/pkg/random"
+	"os"
+	"path"
+)
+
+const (
+	fileIDLength = 8
+)
 
 func GenerateFileID() string {
-	return random.GenerateRandomDigitalWithUpperCaseLetterCode(8)
+	return random.GenerateRandomDigitalWithUpperCaseLetterCode(fileIDLength)
 }
 
 // GetFilePathByFileID generate file path
 // TODO consider the file conflict
 func GetFilePathByFileID(fileID string) string {
-	return "/tmp/pprof-web-" + fileID
+	return path.Join(os.TempDir(), fmt.Sprintf("pprof-web-%s", fileID))
 }
