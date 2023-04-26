@@ -3,6 +3,7 @@ module github.com/zjc17/pprof-web
 go 1.20
 
 require (
+	github.com/gin-contrib/gzip v0.0.6
 	github.com/gin-gonic/gin v1.9.0
 	github.com/google/pprof v0.0.0-20230406165453-00490a63f317
 )

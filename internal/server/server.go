@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/zjc17/pprof-web/internal/files"
 	"log"
@@ -30,6 +31,8 @@ func Launch(params *LaunchParams) error {
 	gin.SetMode(gin.ReleaseMode)
 
 	router := gin.Default()
+	router.Use(gzip.Gzip(gzip.DefaultCompression))
+
 	router.GET("/", func(c *gin.Context) {
 		c.Data(http.StatusOK, "text/html", []byte(PageDocument))
 	})
