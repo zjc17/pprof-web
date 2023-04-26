@@ -71,7 +71,7 @@ func (p *Flags) ExtraUsage() string {
 // Parse implements the plugin.FlagSet interface.
 func (p *Flags) Parse(usage func()) []string {
 	p.s.Usage = usage
-	p.s.Parse(p.Args)
+	_ = p.s.Parse(p.Args)
 	args := p.s.Args()
 	if len(args) == 0 {
 		usage()
