@@ -13,6 +13,7 @@ const (
 )
 
 type (
+	// LaunchParams for gin server
 	LaunchParams struct {
 		Port uint16
 	}

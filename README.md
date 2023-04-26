@@ -1,5 +1,6 @@
 # Pprof Web Visualizer
-
+[![CodeQL](https://github.com/zjc17/pprof-web/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/zjc17/pprof-web/actions/workflows/github-code-scanning/codeql)
+[![Security Scan](https://github.com/zjc17/pprof-web/actions/workflows/scan.yml/badge.svg)](https://github.com/zjc17/pprof-web/actions/workflows/scan.yml)
 [![Release](https://github.com/zjc17/pprof-web/actions/workflows/release.yml/badge.svg)](https://github.com/zjc17/pprof-web/actions/workflows/release.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/zjc17/pprof-web)](https://goreportcard.com/report/github.com/zjc17/pprof-web)
 [![Docker Image](https://img.shields.io/docker/pulls/lovecho/pprof-web.svg)](https://hub.docker.com/r/lovecho/pprof-web)

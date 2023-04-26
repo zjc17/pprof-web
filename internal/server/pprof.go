@@ -15,19 +15,26 @@ func startPProfServer(filePath string) (mux *http.ServeMux, err error) {
 		Flagset: &pprof.Flags{
 			Args: []string{"-http=localhost:0", "-no_browser", filePath},
 		},
-		HTTPServer: func(args *driver.HTTPServerArgs) error {
-			for pattern, handler := range args.Handlers {
-				if pattern == "/" {
-					mux.Handle(pprofWebPath, handler)
-				} else {
-					mux.Handle(path.Join(pprofWebPath, pattern), handler)
-				}
-			}
-			return nil
-		},
+		HTTPServer: pprofHttpServer(mux),
 	}
+
 	if err = driver.PProf(options); err != nil {
 		return
 	}
+
 	return
+}
+
+// pprofHttpServer wrap http server for pprof profile manager
+func pprofHttpServer(mux *http.ServeMux) func(*driver.HTTPServerArgs) error {
+	return func(args *driver.HTTPServerArgs) error {
+		for pattern, handler := range args.Handlers {
+			if pattern == "/" {
+				mux.Handle(pprofWebPath, handler)
+			} else {
+				mux.Handle(path.Join(pprofWebPath, pattern), handler)
+			}
+		}
+		return nil
+	}
 }
