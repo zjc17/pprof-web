@@ -9,52 +9,52 @@
   <a href="README.md" target="_blank">ENGLISH</a> | <a href="README_CN.md">中文文档</a>
 </p>
 
-Golang Pprof Web Visualizer is a web application that visualizes the output of the pprof tool in a web browser.
+Golang Pprof Web Visualizer 是一个网络应用程序，可以在网络浏览器中对 pprof 工具的输出进行可视化。
 
-The Size of the binary is < 10MB.
+二进制文件小于10MB。
 
-Support on WebUI, x86, ARM, Linux and MacOS.
+支持 WebUI, x86, ARM, Linux 和 MacOS。
 
-![preview 01](.github/preview-01.png)
+![预览01](.github/preview-01.png)
 
-![preview 02](.github/preview-02.png)
+![预览02](.github/preview-02.png)
 
-## Download
+## 下载
 
-Download the binaries for your system and architecture from the [release page](https://github.com/zjc17/pprof-web/releases).
+从[发布页](https://github.com/zjc17/pprof-web/releases)下载适合你的系统和架构的二进制文件。
 
-If you prefer docker, you can use the following command (DockerHub):
+如果你喜欢docker，你可以使用以下命令（DockerHub）：
 
-```bash
+``bash
 docker pull lovecho/pprof-web:latest
 docker pull lovecho/pprof-web:latest
 ```
 
-## Usage
+## 用法
 
-Use default parameters to format all configuration files in the current directory:
+使用默认参数来格式化当前目录下的所有配置文件：
 
-```bash
+``bash
 ./pprof-web
 ```
 
-This will start a web server on port 8080.
+这将在8080端口启动一个Web服务器。
 
-Then you can access it at [localhost:8080](http://localhost:8080).
+然后你可以在[localhost:8080](http://localhost:8080)访问它。
 
-### Docker Usage
+### Docker用法
 
-There is no difference between using parameters in Docker and the above, for example, we start a Web UI formatting tool service in Docker:
+在Docker中使用参数和上面的方法没有区别，例如，我们在Docker中启动一个Web UI格式化工具服务：
 
 ```bash
 docker run --rm -it -p 8080:8080 lovecho/pprof-web:latest
 ```
 
-## Credit
+## 信用
 
-Web Components:
+网络组件：
 
-- Gin is a HTTP web framework written in Go (Golang), under [MIT license].
+- Gin是一个用Go（Golang）编写的HTTP网络框架，在[MIT许可]下。
   - https://github.com/gin-gonic/gin
-- Crayons - A UI Kit comprising of web components for building Freshworks Apps! - [License not specified yet]
+- Crayons - 一个由Web组件组成的UI工具包，用于构建Freshworks的应用程序! - [还没有指定许可证] 。
   - https://github.com/freshworks/crayons
