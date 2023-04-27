@@ -50,6 +50,32 @@ docker pull lovecho/pprof-web:latest
 docker run --rm -it -p 8080:8080 lovecho/pprof-web:latest
 ```
 
+## 现场演示
+
+你可以在 [pprof.gotool.tech](https://pprof.gotool.tech/) 访问实时演示。
+
+### 最佳实践
+
+在远程机器内通过curl上传pprof的结果，然后从你的本地机器访问 web UI。
+
+```bash
+# 用curl上传
+curl -F "file=@$FILE_PATH" https://pprof.gotool.tech/submit -v
+```
+
+然后你可以检查输出，发现如下内容
+
+```bash
+< HTTP/2 307
+< date: Thu, 27 Apr 2023 08:14:54 GMT
+< location: /pprof/?file_id=XXXXXXXX
+< vary: Accept-Encoding
+< cf-cache-status: DYNAMIC
+```
+
+然后你可以访问 `https://pprof.gotool.tech/pprof/?file_id=XXXXXXXX` 来查看你的pprof结果。
+
+
 ## 信用
 
 网络组件：

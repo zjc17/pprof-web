@@ -50,6 +50,31 @@ There is no difference between using parameters in Docker and the above, for exa
 docker run --rm -it -p 8080:8080 lovecho/pprof-web:latest
 ```
 
+## Live Demo
+
+You can access live demo at [pprof.gotool.tech](https://pprof.gotool.tech/).
+
+### Best practice
+
+Upload the pprof result by curl inside a remote machine and then access the web UI from your local machine.
+
+```bash
+# upload by curl
+curl -F "file=@$FILE_PATH" https://pprof.gotool.tech/submit -v
+```
+
+Then you can check the output and find something like below
+
+```bash
+< HTTP/2 307
+< date: Thu, 27 Apr 2023 08:14:54 GMT
+< location: /pprof/?file_id=XXXXXXXX
+< vary: Accept-Encoding
+< cf-cache-status: DYNAMIC
+```
+
+You can then visit `https://pprof.gotool.tech/pprof/?file_id=XXXXXXXX` to view your pprof result.
+
 ## Credit
 
 Web Components:
