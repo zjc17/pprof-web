@@ -12,6 +12,8 @@ import (
 
 const (
 	pprofWebPath = "/pprof/"
+	// maxUploadSize 32 MiB
+	maxUploadSize = 32 << 20
 )
 
 type (
@@ -38,6 +40,11 @@ func Launch(params *LaunchParams) error {
 	})
 
 	router.POST("/submit", func(c *gin.Context) {
+		// check upload size
+		if err := c.Request.ParseMultipartForm(maxUploadSize); err != nil {
+			c.Data(http.StatusBadRequest, "text/plain; charset=UTF-8", []byte("file too large"))
+			return
+		}
 		// parse file form
 		fileHeader, err := c.FormFile("file")
 		if err != nil {
