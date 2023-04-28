@@ -25,7 +25,7 @@ Golang Pprof Web Visualizer 是一个网络应用程序，可以在网络浏览�
 
 如果你喜欢docker，你可以使用以下命令（DockerHub）：
 
-``bash
+```bash
 docker pull lovecho/pprof-web:latest
 docker pull lovecho/pprof-web:latest
 ```
@@ -34,7 +34,7 @@ docker pull lovecho/pprof-web:latest
 
 使用默认参数来格式化当前目录下的所有配置文件：
 
-``bash
+```bash
 ./pprof-web
 ```
 
